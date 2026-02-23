@@ -4,9 +4,7 @@ class MovieService {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: 'https://api.themoviedb.org/3',
-      queryParameters: {
-        'api_key': 'd6a8684cac5a1d276ecc5af5c525df4e',
-      }, // Ganti API Key
+      queryParameters: {'api_key': 'API_KEY_HERE'}, // Ganti API Key
     ),
   );
 
