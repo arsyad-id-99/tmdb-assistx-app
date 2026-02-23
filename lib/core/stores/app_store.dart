@@ -52,6 +52,9 @@ abstract class _AppStore with Store {
         'apply': '適用',
         'overview_not_found': '概要が見つかりませんでした。',
         'overview': '概要',
+        'movies_not_found': '映画が見つかりませんでした。',
+        'bookmark_added': '映画がブックマークに追加されました。',
+        'bookmark_removed': '映画がブックマークから削除されました。',
       };
     } else if (locale == 'en') {
       return {
@@ -78,6 +81,9 @@ abstract class _AppStore with Store {
         'apply': 'Apply',
         'overview_not_found': 'Overview not found.',
         'overview': 'Overview',
+        'movies_not_found': 'Movies not found.',
+        'bookmark_added': 'Movie added to bookmarks.',
+        'bookmark_removed': 'Movie removed from bookmarks.',
       };
     }
     // Default: ID
@@ -105,6 +111,9 @@ abstract class _AppStore with Store {
       'apply': 'Terapkan',
       'overview_not_found': 'Ringkasan tidak ditemukan.',
       'overview': 'Sinopsis',
+      'movies_not_found': 'Film tidak ditemukan.',
+      'bookmark_added': 'Film ditambahkan ke bookmark.',
+      'bookmark_removed': 'Film dihapus dari bookmark.',
     };
   }
 
@@ -123,15 +132,17 @@ abstract class _AppStore with Store {
   }
 
   @action
-  void toggleBookmark(Map<String, dynamic> movie) {
+  bool toggleBookmark(Map<String, dynamic> movie) {
     final isExist = bookmarkedMovies.any((m) => m['id'] == movie['id']);
     if (isExist) {
       bookmarkedMovies.removeWhere((m) => m['id'] == movie['id']);
+      _saveBookmarksToPrefs();
+      return false;
     } else {
       bookmarkedMovies.add(movie);
+      _saveBookmarksToPrefs();
+      return true;
     }
-
-    _saveBookmarksToPrefs();
   }
 
   bool isBookmarked(int movieId) {

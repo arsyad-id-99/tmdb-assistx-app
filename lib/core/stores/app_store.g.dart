@@ -86,7 +86,7 @@ mixin _$AppStore on _AppStore, Store {
   }
 
   @override
-  void toggleBookmark(Map<String, dynamic> movie) {
+  bool toggleBookmark(Map<String, dynamic> movie) {
     final _$actionInfo = _$_AppStoreActionController.startAction(
       name: '_AppStore.toggleBookmark',
     );

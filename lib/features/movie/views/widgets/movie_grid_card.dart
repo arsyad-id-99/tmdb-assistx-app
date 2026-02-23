@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:tmdb_assistx_app/core/utils/snackbar_utils.dart';
 import 'package:tmdb_assistx_app/features/movie/views/movie_detail_views.dart';
 import '../../../../core/di/locator.dart';
 import '../../../../core/stores/app_store.dart';
@@ -55,7 +56,18 @@ class MovieGridCard extends StatelessWidget {
                               color: isBookmarked ? Colors.red : Colors.white,
                               size: 20,
                             ),
-                            onPressed: () => appStore.toggleBookmark(movie),
+                            onPressed: () {
+                              final isAdded = appStore.toggleBookmark(movie);
+                              final message = isAdded
+                                  ? appStore.t['bookmark_added']!
+                                  : appStore.t['bookmark_removed']!;
+
+                              SnackbarUtils.showBookmarkSnackbar(
+                                context,
+                                isAdded,
+                                message,
+                              );
+                            },
                           ),
                         );
                       },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:tmdb_assistx_app/core/utils/snackbar_utils.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/stores/app_store.dart';
 
@@ -13,7 +14,11 @@ class BookmarkView extends StatelessWidget {
     return Observer(
       builder: (_) {
         if (appStore.bookmarkedMovies.isEmpty) {
-          return const Center(child: Text('Belum ada film yang disimpan.'));
+          return Center(
+            child: Text(
+              appStore.t['movies_not_found'] ?? 'No bookmarked movies found.',
+            ),
+          );
         }
 
         return ListView.builder(
@@ -29,7 +34,14 @@ class BookmarkView extends StatelessWidget {
               title: Text(movie['title'] ?? 'Unknown'),
               trailing: IconButton(
                 icon: const Icon(Icons.delete, color: Colors.red),
-                onPressed: () => appStore.toggleBookmark(movie),
+                onPressed: () {
+                  final isAdded = appStore.toggleBookmark(movie);
+                  final message = isAdded
+                      ? appStore.t['bookmark_added']!
+                      : appStore.t['bookmark_removed']!;
+
+                  SnackbarUtils.showBookmarkSnackbar(context, isAdded, message);
+                },
               ),
             );
           },

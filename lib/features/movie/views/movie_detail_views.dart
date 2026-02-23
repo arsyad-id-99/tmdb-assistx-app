@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:tmdb_assistx_app/core/utils/snackbar_utils.dart';
 import 'package:tmdb_assistx_app/features/movie/stores/movie_detail_store.dart';
 import 'package:tmdb_assistx_app/features/movie/views/widgets/movie_detail_shimmer.dart';
 import '../../../../core/di/locator.dart';
@@ -68,7 +69,18 @@ class _MovieDetailViewState extends State<MovieDetailViews> {
                             color: isBookmarked ? Colors.red : Colors.white,
                           ),
                         ),
-                        onPressed: () => appStore.toggleBookmark(movie),
+                        onPressed: () {
+                          final isAdded = appStore.toggleBookmark(movie);
+                          final message = isAdded
+                              ? appStore.t['bookmark_added']!
+                              : appStore.t['bookmark_removed']!;
+
+                          SnackbarUtils.showBookmarkSnackbar(
+                            context,
+                            isAdded,
+                            message,
+                          );
+                        },
                       );
                     },
                   ),
